@@ -1,4 +1,4 @@
-import { Client, Databases, Query } from 'appwrite';
+import { Client, Databases, Query } from 'https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm';
 
 const client = new Client()
   .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
