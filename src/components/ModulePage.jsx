@@ -46,11 +46,11 @@ export default function ModulePage({ moduleCode }) {
 
   return (
     <div className="module-page">
-      <header className="module-header">
+      <section className="hero-section">
         <h1>{module.title}</h1>
-        <p className="module-meta">{module.year}A - {module.semester}</p>
-        <p className="module-description">{module.description}</p>
-      </header>
+        <p className="hero-meta">{module.year}A - {module.semester}</p>
+        <p className="hero-description">{module.description}</p>
+      </section>
       <SectionList module={module} sections={sections} />
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { databases, Query, CONFIG } from '../appwrite';
 
-export default function ResourceList({ moduleId, sectionId, sectionTitle }) {
+export default function ResourceList({ moduleId, sectionId }) {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,41 +31,50 @@ export default function ResourceList({ moduleId, sectionId, sectionTitle }) {
 
   if (loading) return <div className="loading">Chargement des ressources...</div>;
 
+  const getFileIcon = (type) => {
+    switch (type) {
+      case 'pdf': return '📄';
+      case 'video': return '🎬';
+      case 'link': return '🔗';
+      case 'image': return '🖼️';
+      case 'ppt':
+      case 'pptx': return '📊';
+      case 'doc':
+      case 'docx': return '📝';
+      case 'xls':
+      case 'xlsx': return '📈';
+      default: return '📎';
+    }
+  };
+
+  const getFileSize = (url) => {
+    return '';
+  };
+
   return (
-    <div className="resources-container">
-      <h2>{sectionTitle}</h2>
+    <div className="file-list">
       {resources.length === 0 ? (
-        <p className="no-resources">Aucune ressource pour cette section.</p>
+        <p className="no-resources">Aucun document disponible pour cette section.</p>
       ) : (
-        <ul className="resources-list">
-          {resources.map((r) => (
-            <li key={r.$id} className="resource-item">
-              <a
-                href={r.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="resource-link"
-              >
-                <span className="resource-icon">{getIcon(r.type)}</span>
-                <span className="resource-title">{r.title}</span>
-              </a>
+        resources.map((r) => (
+          <a
+            key={r.$id}
+            href={r.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="file-item"
+          >
+            <div className="file-icon">{getFileIcon(r.type)}</div>
+            <div className="file-info">
+              <div className="file-name">{r.title}</div>
               {r.description && (
-                <p className="resource-description">{r.description}</p>
+                <div className="file-meta">{r.description}</div>
               )}
-            </li>
-          ))}
-        </ul>
+            </div>
+            <div className="file-download">↓</div>
+          </a>
+        ))
       )}
     </div>
   );
-}
-
-function getIcon(type) {
-  switch (type) {
-    case 'pdf': return '📄';
-    case 'video': return '🎬';
-    case 'link': return '🔗';
-    case 'image': return '🖼️';
-    default: return '📎';
-  }
 }
