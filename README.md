@@ -84,7 +84,21 @@ npm run dev
 
 ## Déploiement
 
-Le projet est configuré avec GitHub Actions. Pousser sur `main` déclenche le déploiement.
+Le site sera accessible à : `https://tiffank1802.github.io/enise-site-2/`
+
+**Étapes finales pour activer le déploiement :**
+
+1. Aller sur https://github.com/tiffank1802/enise-site-2/settings/pages
+2. Sous "Build and deployment", sélectionner "GitHub Actions"
+3. Le workflow se lancera automatiquement au prochain push
+
+**Pour déclencher le premier déploiement :**
+
+```bash
+git add .
+git commit -m "Trigger deployment"
+git push origin main
+```
 
 ## Structure du projet
 
