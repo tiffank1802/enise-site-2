@@ -1,0 +1,39 @@
+⚠️ MongoDB non disponible, utilisation du système de fichiers local
+[
+{
+  "model": "app_core.specialite",
+  "pk": 4,
+  "fields": {
+    "nom": "Génie Civil",
+    "slug": "genie-civil",
+    "description": "Formation complète en ingénierie de la construction : bâtiment, travaux publics, ouvrages d'art, et énergétique du bâtiment. Cette spécialité prépare les futurs ingénieurs à concevoir, construire et gérer les infrastructures de demain.",
+    "image_url": null,
+    "icone": "fa-building",
+    "ordre": 0
+  }
+},
+{
+  "model": "app_core.specialite",
+  "pk": 5,
+  "fields": {
+    "nom": "Génie Mécanique",
+    "slug": "genie-mecanique",
+    "description": "Expertise en conception mécanique, productique, énergétique et matériaux. Les étudiants apprennent à concevoir des systèmes mécaniques innovants, optimiser les processus de production et maîtriser les nouveaux matériaux.",
+    "image_url": null,
+    "icone": "fa-cogs",
+    "ordre": 1
+  }
+},
+{
+  "model": "app_core.specialite",
+  "pk": 6,
+  "fields": {
+    "nom": "Génie Physique",
+    "slug": "genie-physique",
+    "description": "Spécialisation à l'interface de la physique et de l'ingénierie : capteurs communicants, photonique, instrumentation scientifique. Formation orientée vers les hautes technologies et la recherche.",
+    "image_url": null,
+    "icone": "fa-atom",
+    "ordre": 2
+  }
+}
+]
