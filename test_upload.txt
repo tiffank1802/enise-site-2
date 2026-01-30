@@ -1,0 +1,5 @@
+Ceci est un fichier de test pour l'application ENISE.
+Test d'upload avec le gestionnaire de fichiers.
+
+Contenu du fichier de démonstration.
+Date: 2024-01-14

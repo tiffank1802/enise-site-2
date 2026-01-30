@@ -1,0 +1,276 @@
+{% extends 'app_core/base.html' %}
+{% load file_tags %}
+
+{% block title %}Gestionnaire de fichiers - ENISE{% endblock %}
+
+{% block extra_css %}
+<style>
+.enise-text-blue {
+    color: #1e3a8a;
+}
+.file-card {
+    transition: all 0.3s ease;
+}
+.file-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.upload-area {
+    border: 2px dashed #cbd5e0;
+    transition: all 0.3s ease;
+}
+.upload-area:hover {
+    border-color: #1e3a8a;
+    background-color: #f7fafc;
+}
+.upload-area.drag-over {
+    border-color: #1e3a8a;
+    background-color: #ebf8ff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 md:px-12 py-8">
+    <!-- En-tête -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold enise-text-blue">Gestionnaire de fichiers</h1>
+            <p class="text-gray-600 mt-2">{{ total_files }} fichier(s) dans votre espace</p>
+        </div>
+        <button onclick="showUploadArea()" 
+                class="bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition">
+            <i class="fas fa-upload mr-2"></i>Uploader un fichier
+        </button>
+    </div>
+
+    <!-- Zone d'upload -->
+    <div id="uploadArea" class="upload-area rounded-lg p-8 mb-8 text-center hidden">
+        <i class="fas fa-cloud-upload-alt text-6xl text-blue-900 mb-4"></i>
+        <h3 class="text-xl font-bold mb-2">Glissez vos fichiers ici</h3>
+        <p class="text-gray-600 mb-4">ou cliquez pour sélectionner</p>
+        <form id="uploadForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" id="fileInput" name="file" class="hidden" multiple>
+            <div class="flex flex-wrap gap-2 justify-center">
+                <label class="flex items-center">
+                    <input type="checkbox" name="is_public" class="mr-2">
+                    <span>Rendre public</span>
+                </label>
+            </div>
+        </form>
+    </div>
+
+    <!-- Barre de progression -->
+    <div id="progressContainer" class="hidden mb-6">
+        <div class="bg-gray-200 rounded-full h-2">
+            <div id="progressBar" class="bg-blue-900 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p id="progressText" class="text-sm text-gray-600 mt-2">Upload en cours...</p>
+    </div>
+
+    <!-- Filtres et catégories -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="flex flex-wrap gap-4 items-center">
+            <div class="flex gap-2">
+                <button onclick="filterFiles('all')" class="filter-btn px-4 py-2 rounded-lg bg-blue-900 text-white">Tous</button>
+                {% for category, files in files_by_category.items %}
+                <button onclick="filterFiles('{{ category }}')" class="filter-btn px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300">
+                    {{ category|title }} ({{ files|length }})
+                </button>
+                {% endfor %}
+            </div>
+            <div class="ml-auto">
+                <input type="text" placeholder="Rechercher..." class="border rounded-lg px-4 py-2" onkeyup="searchFiles(this.value)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Grille de fichiers -->
+    <div id="filesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for file in files %}
+        <div class="file-card bg-white rounded-lg shadow-md overflow-hidden" data-category="{{ file.category }}">
+            <div class="h-32 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                <i class="fas {{ file|file_icon }} text-4xl text-blue-900"></i>
+            </div>
+            <div class="p-4">
+                <h4 class="font-semibold truncate" title="{{ file.original_filename }}">{{ file.original_filename }}</h4>
+                <p class="text-sm text-gray-600">{{ file.file_size|filesizeformat }}</p>
+                <p class="text-xs text-gray-500 mt-1">
+                    {% if file.is_public %}<i class="fas fa-globe text-green-500"></i> Public{% else %}<i class="fas fa-lock text-red-500"></i> Privé{% endif %}
+                </p>
+                <div class="mt-3 flex gap-2">
+                    <a href="{% url 'download_file' file.id %}" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-download"></i>
+                    </a>
+                    <a href="{% url 'file_details' file.id %}" class="text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-info-circle"></i>
+                    </a>
+                    <button onclick="deleteFile('{{ file.id }}', '{{ file.original_filename }}')" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Message si aucun fichier -->
+    {% if not files %}
+    <div class="text-center py-12">
+        <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">Aucun fichier</h3>
+        <p class="text-gray-500">Commencez par uploader des fichiers dans votre espace</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showUploadArea() {
+    document.getElementById('uploadArea').classList.toggle('hidden');
+}
+
+// Gestion du drag & drop
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('drag-over');
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+});
+
+uploadArea.addEventListener('click', () => {
+    fileInput.click();
+});
+
+fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+});
+
+function handleFiles(files) {
+    for (let file of files) {
+        uploadFile(file);
+    }
+}
+
+function uploadFile(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const isPublic = document.querySelector('input[name="is_public"]').checked;
+    formData.append('is_public', isPublic);
+    formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+
+    document.getElementById('progressContainer').classList.remove('hidden');
+    
+    fetch('{% url "upload_file" %}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMessage('Fichier uploadé avec succès!', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showMessage('Erreur: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showMessage('Erreur lors de l\'upload', 'error');
+    })
+    .finally(() => {
+        document.getElementById('progressContainer').classList.add('hidden');
+    });
+}
+
+function deleteFile(fileId, filename) {
+    if (confirm(`Supprimer "${filename}" ?`)) {
+        fetch(`/files/${fileId}/delete/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage('Fichier supprimé', 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showMessage('Erreur: ' + data.message, 'error');
+            }
+        });
+    }
+}
+
+function filterFiles(category) {
+    const cards = document.querySelectorAll('.file-card');
+    cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    // Mettre à jour les boutons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-900', 'text-white');
+        btn.classList.add('bg-gray-200');
+    });
+    event.target.classList.remove('bg-gray-200');
+    event.target.classList.add('bg-blue-900', 'text-white');
+}
+
+function searchFiles(query) {
+    const cards = document.querySelectorAll('.file-card');
+    cards.forEach(card => {
+        const filename = card.querySelector('h4').textContent.toLowerCase();
+        if (filename.includes(query.toLowerCase())) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showMessage(message, type) {
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${alertClass} fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50`;
+    alertDiv.textContent = message;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 3000);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,1 @@
+# Créer le fichier __init__.py pour le dossier management

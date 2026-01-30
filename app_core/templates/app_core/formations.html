@@ -1,0 +1,75 @@
+{% extends 'app_core/base.html' %}
+
+{% block content %}
+<style>
+.enise-text-blue {
+    color: #1e3a8a;
+}
+</style>
+
+<section class="py-16">
+    <div class="container mx-auto px-4 md:px-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold enise-text-blue mb-4 uppercase tracking-wider">
+                Nos Formations
+            </h1>
+            <div class="h-1 w-20 bg-blue-900 mx-auto"></div>
+            <p class="mt-6 text-gray-600 max-w-2xl mx-auto">
+                Découvrez nos spécialités d'excellence qui forment les ingénieurs de demain
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            {% for specialite in specialites %}
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300">
+                {% if specialite.image_url %}
+                <div class="h-64 bg-gray-200 overflow-hidden">
+                    <img src="{{ specialite.image_url }}" 
+                         alt="{{ specialite.nom }}" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                </div>
+                {% else %}
+                <div class="h-64 bg-blue-900 flex items-center justify-center">
+                    <div class="text-white text-center">
+                        {% if specialite.icone %}
+                        <i class="fas {{ specialite.icone }} text-6xl mb-4"></i>
+                        {% endif %}
+                        <h3 class="text-2xl font-bold">{{ specialite.nom }}</h3>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="p-8">
+                    <h3 class="font-bold text-2xl mb-4 enise-text-blue">{{ specialite.nom }}</h3>
+                    <p class="text-gray-600 mb-6">{{ specialite.description }}</p>
+                    <div class="space-y-3">
+                        <a href="{% url 'specialite_detail' specialite.slug %}" 
+                           class="inline-block bg-blue-900 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-800 transition">
+                            Découvrir la spécialité
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-3 text-center text-gray-500 py-12">
+                <p class="text-xl">Aucune formation disponible pour le moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-16 bg-blue-50 rounded-2xl p-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold enise-text-blue mb-4">Vous avez des questions ?</h2>
+                <p class="text-gray-600 mb-6">Notre équipe d'orientation est là pour vous accompagner</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#" class="bg-blue-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-800 transition">
+                        Contacter l'orientation
+                    </a>
+                    <a href="#" class="border-2 border-blue-900 text-blue-900 px-8 py-3 rounded-lg font-bold hover:bg-blue-900 hover:text-white transition">
+                        Télécharger la brochure
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,28 @@
+# Lancer le serveur Django Python
+echo "🚀 DÉMARRAGE DU SERVEUR DJANGO PYTHON"
+echo "===================================="
+echo ""
+echo "📋 Configuration :"
+echo "   - Base de données : SQLite (authentification Django)"
+echo "   - Gestion des fichiers : Système de fichiers local"
+echo "   - Port : 8000"
+echo ""
+echo "🌐 URLs disponibles :"
+echo "   • Site principal          : http://localhost:8000/"
+echo "   • Connexion              : http://localhost:8000/login/"
+echo "   • Gestionnaire fichiers  : http://localhost:8000/files/"
+echo "   • Administration Django : http://localhost:8000/admin/"
+echo ""
+echo "👤 Identifiants de connexion :"
+echo "   • Nom d'utilisateur : admin"
+echo "   • Mot de passe      : admin123"
+echo ""
+echo "⚠️  Si vous voyez 'Connection refused', patientez quelques secondes..."
+echo "    Le serveur démarre automatiquement"
+echo ""
+echo "🔧 Pour arrêter le serveur :"
+echo "   pkill -f runserver"
+echo ""
+
+# Démarrer le serveur
+source venv/bin/activate && python manage.py runserver 0.0.0.0:8000

@@ -1,0 +1,36 @@
+/* Styles personnalisés pour l'ENISE */
+:root {
+    --enise-blue: #1e3a8a;
+    --enise-blue-light: #3b82f6;
+    --enise-gray: #f3f4f6;
+}
+
+/* Animations et transitions */
+.group:hover .group-hover\:scale-110 {
+    transform: scale(1.1);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    .hero-gradient h2 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--enise-blue);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--enise-blue-light);
+}

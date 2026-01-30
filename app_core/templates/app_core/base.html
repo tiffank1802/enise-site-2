@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ENISE - École Nationale d'Ingénieurs de Saint-Étienne{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Vos styles CSS -->
+    <link rel="stylesheet" href="{% static 'app_core/css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50 text-gray-800">
+    
+    <!-- Header -->
+    {% include 'app_core/includes/header.html' %}
+    
+    <!-- Navigation -->
+    {% include 'app_core/includes/navigation.html' %}
+    
+    <!-- Contenu principal -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    {% include 'app_core/includes/footer.html' %}
+    
+    <!-- Scripts JavaScript -->
+    <script src="{% static 'app_core/js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

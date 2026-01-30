@@ -1,0 +1,30 @@
+[
+  {
+    "file_id": "file_1768398946685",
+    "user_id": "1",
+    "access_type": "upload",
+    "timestamp": "2026-01-14T14:55:46.686457",
+    "success": true
+  },
+  {
+    "file_id": "file_1768399163482",
+    "user_id": "1",
+    "access_type": "upload",
+    "timestamp": "2026-01-14T14:59:23.483671",
+    "success": true
+  },
+  {
+    "file_id": "file_1768399769514",
+    "user_id": "test_user",
+    "access_type": "upload",
+    "timestamp": "2026-01-14 15:09:29.514496",
+    "success": true
+  },
+  {
+    "file_id": "file_1768399894310",
+    "user_id": "1",
+    "access_type": "upload",
+    "timestamp": "2026-01-14 15:11:34.311539",
+    "success": true
+  }
+]

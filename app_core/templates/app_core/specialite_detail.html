@@ -1,0 +1,131 @@
+{% extends 'app_core/base.html' %}
+
+{% block content %}
+<style>
+.enise-text-blue {
+    color: #1e3a8a;
+}
+.enise-blue {
+    background-color: #1e3a8a;
+}
+</style>
+
+<div class="bg-white">
+    <div class="container mx-auto px-4 md:px-12 py-16">
+        <!-- Breadcrumb -->
+        <nav class="text-sm mb-8">
+            <a href="{% url 'index' %}" class="text-blue-600 hover:underline">Accueil</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'formations' %}" class="text-blue-600 hover:underline">Formations</a>
+            <span class="mx-2">/</span>
+            <span class="text-gray-600">{{ specialite.nom }}</span>
+        </nav>
+
+        <div class="grid md:grid-cols-3 gap-12">
+            <!-- Contenu principal -->
+            <div class="md:col-span-2">
+                {% if specialite.image_url %}
+                <div class="h-96 bg-gray-200 rounded-xl overflow-hidden mb-8">
+                    <img src="{{ specialite.image_url }}" 
+                         alt="{{ specialite.nom }}" 
+                         class="w-full h-full object-cover">
+                </div>
+                {% endif %}
+
+                <h1 class="text-4xl font-bold enise-text-blue mb-6">{{ specialite.nom }}</h1>
+                
+                <div class="prose max-w-none mb-8">
+                    <p class="text-lg text-gray-700">{{ specialite.description }}</p>
+                </div>
+
+                <!-- Programme détaillé -->
+                <section class="mb-12">
+                    <h2 class="text-2xl font-bold enise-text-blue mb-6">Programme</h2>
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <p class="text-gray-700">
+                            Le programme de la spécialité {{ specialite.nom }} couvre les aspects théoriques 
+                            et pratiques fondamentaux pour former des ingénieurs compétents et polyvalents.
+                        </p>
+                        <div class="mt-6 space-y-4">
+                            <div class="border-l-4 border-blue-900 pl-4">
+                                <h3 class="font-bold">1ère année</h3>
+                                <p class="text-gray-600">Sciences fondamentales et introduction à la spécialité</p>
+                            </div>
+                            <div class="border-l-4 border-blue-900 pl-4">
+                                <h3 class="font-bold">2ème année</h3>
+                                <p class="text-gray-600">Approfondissement des connaissances spécialisées</p>
+                            </div>
+                            <div class="border-l-4 border-blue-900 pl-4">
+                                <h3 class="font-bold">3ème année</h3>
+                                <p class="text-gray-600">Spécialisation et projet de fin d'études</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Débouchés -->
+                <section class="mb-12">
+                    <h2 class="text-2xl font-bold enise-text-blue mb-6">Débouchés</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 rounded-lg p-6">
+                            <h3 class="font-bold mb-3">Secteurs d'activité</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>• Industrie</li>
+                                <li>• BTP et construction</li>
+                                <li>• Recherche et développement</li>
+                                <li>• Conseil</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-6">
+                            <h3 class="font-bold mb-3">Postes types</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>• Ingénieur projet</li>
+                                <li>• Chef de projet</li>
+                                <li>• Ingénieur R&D</li>
+                                <li>• Consultant technique</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="md:col-span-1">
+                <div class="sticky top-24">
+                    <!-- Infos pratiques -->
+                    <div class="bg-blue-900 text-white rounded-lg p-6 mb-6">
+                        <h3 class="font-bold text-xl mb-4">Informations pratiques</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="font-semibold">Durée</p>
+                                <p>3 ans</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Diplôme</p>
+                                <p>Diplôme d'Ingénieur</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Admission</p>
+                                <p>Concours CPGE, DUT, BTS</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="space-y-3">
+                        <a href="#" class="block w-full bg-blue-900 text-white text-center px-6 py-3 rounded-lg font-bold hover:bg-blue-800 transition">
+                            Postuler maintenant
+                        </a>
+                        <a href="#" class="block w-full border-2 border-blue-900 text-blue-900 text-center px-6 py-3 rounded-lg font-bold hover:bg-blue-900 hover:text-white transition">
+                            Télécharger la brochure
+                        </a>
+                        <a href="#" class="block w-full border-2 border-gray-300 text-gray-700 text-center px-6 py-3 rounded-lg font-bold hover:border-blue-900 hover:text-blue-900 transition">
+                            Journées portes ouvertes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

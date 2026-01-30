@@ -1,0 +1,8 @@
+Django>=4.2
+gunicorn
+appwrite
+python-decouple
+python-dotenv
+Pillow
+pymongo
+gridfs

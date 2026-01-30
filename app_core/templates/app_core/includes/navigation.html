@@ -1,0 +1,41 @@
+<!-- Navigation principale -->
+<nav class="bg-blue-900 text-white sticky top-0 z-50">
+    <div class="container mx-auto px-4 md:px-12">
+        <div class="flex justify-between items-center h-16">
+            <div class="hidden md:flex space-x-8">
+                <a href="{% url 'index' %}" class="hover:bg-blue-800 px-3 py-2 rounded transition">Accueil</a>
+                <a href="{% url 'formations' %}" class="hover:bg-blue-800 px-3 py-2 rounded transition">Formations</a>
+                <a href="#" class="hover:bg-blue-800 px-3 py-2 rounded transition">Recherche</a>
+                <a href="#" class="hover:bg-blue-800 px-3 py-2 rounded transition">International</a>
+                <a href="#" class="hover:bg-blue-800 px-3 py-2 rounded transition">Entreprises</a>
+                <a href="#" class="hover:bg-blue-800 px-3 py-2 rounded transition">Vie étudiante</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded transition">
+                    Candidater
+                </button>
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Menu mobile (caché par défaut) -->
+        <div id="mobileMenu" class="hidden md:hidden pb-4">
+            <a href="{% url 'index' %}" class="block py-2 hover:bg-blue-800 px-3 rounded">Accueil</a>
+            <a href="{% url 'formations' %}" class="block py-2 hover:bg-blue-800 px-3 rounded">Formations</a>
+            <a href="#" class="block py-2 hover:bg-blue-800 px-3 rounded">Recherche</a>
+            <a href="#" class="block py-2 hover:bg-blue-800 px-3 rounded">International</a>
+            <a href="#" class="block py-2 hover:bg-blue-800 px-3 rounded">Entreprises</a>
+            <a href="#" class="block py-2 hover:bg-blue-800 px-3 rounded">Vie étudiante</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('hidden');
+}
+</script>
