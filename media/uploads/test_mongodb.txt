@@ -1,1 +1,1 @@
-Fichier de test pour MongoDB - b'W\x16Y\xc2\x02-\xce\x13'
+Fichier de test pour MongoDB - b'X\r\xfe\x1e\x00\xb6\x98\xaf'

@@ -73,5 +73,26 @@
     "download_count": 0,
     "view_count": 0,
     "file_path": "/root/enise-site/media/uploads/PGD1.m"
+  },
+  {
+    "id": "file_1769800277503",
+    "filename": "test_mongodb.txt",
+    "original_filename": "test_mongodb.txt",
+    "file_size": 61,
+    "file_hash": "e1b50b212de68ddc09c1c0dc753e7dc8e56a1768ba609673af493f68dc86096d",
+    "mime_type": "application/octet-stream",
+    "category": "document",
+    "tags": [
+      "test",
+      "mongodb"
+    ],
+    "owner_id": "test_user",
+    "is_public": false,
+    "allowed_users": [],
+    "created_at": "2026-01-30 20:11:17.503771",
+    "updated_at": "2026-01-30 20:11:17.503771",
+    "download_count": 0,
+    "view_count": 0,
+    "file_path": "/root/enise-site/media/uploads/test_mongodb.txt"
   }
 ]
