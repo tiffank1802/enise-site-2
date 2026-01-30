@@ -53,11 +53,12 @@ class SimpleFileManager:
             self._create_mongodb_indexes()
     
     def _test_mongodb_connection(self):
-        """Tester la connexion MongoDB"""
+        """Tester la connexion MongoDB avec timeout court"""
         if not self.client:
             return False
         try:
-            self.client.admin.command('ping')
+            # Timeout court (2 secondes max) pour ne pas bloquer le démarrage
+            self.client.admin.command('ping', maxTimeMS=2000)
             return True
         except Exception as e:
             print(f"Erreur de connexion MongoDB: {e}")
@@ -380,5 +381,20 @@ class SimpleFileManager:
             return True
         return False
 
-# Instance globale
-file_manager = SimpleFileManager()
+# Instance globale (lazy initialization)
+_file_manager = None
+
+def get_file_manager():
+    """Get or create the file manager instance (lazy initialization)"""
+    global _file_manager
+    if _file_manager is None:
+        _file_manager = SimpleFileManager()
+    return _file_manager
+
+# Backward compatibility
+class FileManagerProxy:
+    """Proxy pour backward compatibility"""
+    def __getattr__(self, name):
+        return getattr(get_file_manager(), name)
+
+file_manager = FileManagerProxy()
