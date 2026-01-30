@@ -1,0 +1,1 @@
+web: gunicorn enise_site.wsgi --bind 0.0.0.0:7860

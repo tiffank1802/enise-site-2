@@ -25,12 +25,12 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&d3hpc7rcky0d^)vspy#qct&09(+lq(fob^bvn=5+ka7=ryrkh'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-&d3hpc7rcky0d^)vspy#qct&09(+lq(fob^bvn=5+ka7=ryrkh')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default='False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -80,16 +80,29 @@ TEMPLATES = [
 WSGI_APPLICATION = 'enise_site.wsgi.application'
 
 
-# Database
+# Base de données
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# Base de données principale (SQLite pour authentification et contenu)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Pour production : utiliser PostgreSQL ou MySQL
+# Pour développement : SQLite
+if config('DATABASE_ENGINE', default='sqlite3') == 'postgresql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Configuration MongoDB pour les fichiers (avec vos identifiants)
 MONGO_DB_HOST = 'localhost'
@@ -133,13 +146,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = []
+if (BASE_DIR / 'static').exists():
+    STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Media files (Uploads)
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Security settings pour production
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='http://localhost:8000,http://127.0.0.1:8000').split(',')
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default='0', cast=int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default='False') == 'True'
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default='False') == 'True'
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default='False') == 'True'
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default='False') == 'True'
 
 # URLs de connexion (redirection après login)
 LOGIN_URL = '/login/'
@@ -147,7 +170,7 @@ LOGIN_REDIRECT_URL = '/files/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Appwrite Configuration
-APPWRITE_ENDPOINT = os.environ.get('APPWRITE_ENDPOINT', 'https://cloud.appwrite.io/v1')
-APPWRITE_PROJECT_ID = os.environ.get('APPWRITE_PROJECT_ID', '')
-APPWRITE_API_KEY = os.environ.get('APPWRITE_API_KEY', '')
-APPWRITE_DATABASE_ID = os.environ.get('APPWRITE_DATABASE_ID', 'enise_db')
+APPWRITE_ENDPOINT = config('APPWRITE_ENDPOINT', default='https://cloud.appwrite.io/v1')
+APPWRITE_PROJECT_ID = config('APPWRITE_PROJECT_ID', default='')
+APPWRITE_API_KEY = config('APPWRITE_API_KEY', default='')
+APPWRITE_DATABASE_ID = config('APPWRITE_DATABASE_ID', default='enise_db')
