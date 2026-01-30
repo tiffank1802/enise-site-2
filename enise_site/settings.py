@@ -30,7 +30,8 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-&d3hpc7rcky0d^)vspy#q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default='False') == 'True'
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,*').split(',')
+ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS]  # Remove whitespace
 
 
 # Application definition
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -104,12 +106,12 @@ else:
         }
     }
 
-# Configuration MongoDB pour les fichiers (avec vos identifiants)
-MONGO_DB_HOST = 'localhost'
-MONGO_DB_PORT = 27017
-MONGO_DB_USER = 'tiffank1802'
-MONGO_DB_PASSWORD = 'SzPLNg4zfgz3jKuF'
-MONGO_DB_NAME = 'enise_filesystem'
+# Configuration MongoDB pour les fichiers
+MONGO_DB_HOST = config('MONGO_DB_HOST', default='localhost')
+MONGO_DB_PORT = config('MONGO_DB_PORT', default='27017', cast=int)
+MONGO_DB_USER = config('MONGO_DB_USER', default='')
+MONGO_DB_PASSWORD = config('MONGO_DB_PASSWORD', default='')
+MONGO_DB_NAME = config('MONGO_DB_NAME', default='enise_filesystem')
 
 
 # Password validation
@@ -158,6 +160,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Security settings pour production
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='http://localhost:8000,http://127.0.0.1:8000').split(',')
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in CSRF_TRUSTED_ORIGINS]  # Remove whitespace
 SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default='0', cast=int)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default='False') == 'True'
 SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default='False') == 'True'

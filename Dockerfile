@@ -19,6 +19,9 @@ COPY . .
 # Créer les dossiers nécessaires
 RUN mkdir -p staticfiles media logs
 
+# Rendre le script exécutable
+RUN chmod +x run.sh
+
 # Exposer le port
 EXPOSE 7860
 
@@ -27,4 +30,4 @@ ENV PYTHONUNBUFFERED=1
 ENV DEBUG=False
 
 # Commande de démarrage
-CMD ["gunicorn", "enise_site.wsgi", "--bind", "0.0.0.0:7860", "--workers", "2"]
+CMD ["./run.sh"]
