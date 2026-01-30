@@ -19,10 +19,10 @@ python manage.py migrate --noinput --verbosity 2 || {
     python manage.py migrate --noinput --verbosity 2
 }
 
-# Load initial data
-echo "[3/5] Loading initial data..."
-python manage.py loaddata app_core/fixtures/initial_data.json --verbosity 2 || {
-    echo "INFO: Initial data already loaded or file not found"
+# Initialize database with initial data
+echo "[3/5] Initializing database with initial data..."
+python manage.py init_db --verbosity 2 || {
+    echo "WARNING: init_db encountered issues"
 }
 
 # Collect static files
